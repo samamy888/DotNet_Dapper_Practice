@@ -25,14 +25,15 @@ namespace Practice.DB
                 return new SqlConnection(connectionString);
             }
         }
-        public void Add(TestModel testModel)
+        public int Add(TestModel testModel)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                string sQuery = "INSERT INTO Products (Name, Quantity, Price)"
-                                + " VALUES(@Name, @Quantity, @Price)";
+                string sQuery = "INSERT INTO DapperTable (Name)"
+                                + " VALUES(@Name)";
+
                 dbConnection.Open();
-                dbConnection.Execute(sQuery, testModel);
+                return dbConnection.Execute(sQuery, testModel);
             }
         }
 
@@ -41,43 +42,38 @@ namespace Practice.DB
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<TestModel>("SELECT * FROM Products");
+                return dbConnection.Query<TestModel>("SELECT * FROM DapperTable");
             }
         }
 
-        public TestModel GetByID(int id)
+        public TestModel GetByID(int ID)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                string sQuery = "SELECT * FROM Products"
-    + " WHERE ProductId = @Id";
+                string sQuery = "SELECT * FROM DapperTable WHERE ID = @ID";
                 dbConnection.Open();
-                return dbConnection.Query<TestModel>(sQuery, new { Id = id }).FirstOrDefault();
+                return dbConnection.Query<TestModel>(sQuery, new { Id = ID }).FirstOrDefault();
             }
         }
 
-        public void Delete(int id)
+        public int Delete(int ID)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                string sQuery = "DELETE FROM Products"
-   + " WHERE ProductId = @Id";
+                string sQuery = "DELETE FROM DapperTable  WHERE ID = @ID";
                 dbConnection.Open();
-                dbConnection.Execute(sQuery, new { Id = id });
+                return dbConnection.Execute(sQuery, new { Id = ID });
             }
         }
 
-        public void Update(TestModel testModel)
+        public int Update(TestModel testModel)
         {
             using (IDbConnection dbConnection = Connection)
             {
-                string sQuery = "UPDATE Products SET Name = @Name,"
-    + " Quantity = @Quantity, Price= @Price"
-    + " WHERE ProductId = @ProductId";
+                string sQuery = "UPDATE DapperTable SET Name = @Name WHERE ID = @ID";
                 dbConnection.Open();
-                dbConnection.Query(sQuery, testModel);
+                return dbConnection.Execute(sQuery, testModel);
             }
         }
     }
-}
 }
