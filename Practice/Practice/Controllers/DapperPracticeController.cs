@@ -21,34 +21,34 @@ namespace Practice.Controllers
             _repository = repository;
         }
         [HttpPost]
-        public IEnumerable<TestModel> GetAll()
+        public JsonResult GetAll()
         {
             var data = _repository.GetAll();
-            return data;
+            return Json(new ResultModel {  Data = data ,});
         }
         [HttpPost]
-        public bool Add(TestModel FormModel)
+        public JsonResult Add(TestModel FormModel)
         {
             var data = _repository.Add(FormModel);
-            return data >= 1;
+            return Json(new ResultModel { IsSuccess = data >= 1 , });
         }
         [HttpPost]
-        public TestModel GetByID(int ID)
+        public JsonResult GetByID(int ID)
         {
             var data = _repository.GetByID(ID);
-            return data;
+            return Json(new ResultModel {  Data = data, });
         }
         [HttpPost]
-        public bool Delete(int ID)
+        public JsonResult Delete(int ID)
         {
             var data = _repository.Delete(ID);
-            return data >= 1;
+            return Json(new ResultModel { IsSuccess = data >= 1, });
         }
         [HttpPost]
-        public bool Update(TestModel FormModel)
+        public JsonResult Update(TestModel FormModel)
         {
             var data = _repository.Update(FormModel);
-            return data >= 1;
+            return Json(new ResultModel { IsSuccess = data >= 1, });
         }
     }
 }
