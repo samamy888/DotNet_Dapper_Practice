@@ -42,7 +42,7 @@ namespace Practice.DB
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<TestModel>("SELECT * FROM DapperTable");
+                return dbConnection.Query<TestModel>("SELECT ID,Name FROM DapperTable");
             }
         }
 

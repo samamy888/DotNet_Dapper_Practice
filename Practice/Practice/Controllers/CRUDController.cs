@@ -11,11 +11,11 @@ namespace Practice.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class DapperPracticeController : Controller
+    public class CRUDController : Controller
     {
-        private readonly ILogger<DapperPracticeController> _logger;
+        private readonly ILogger<CRUDController> _logger;
         private readonly Repository _repository;
-        public DapperPracticeController(ILogger<DapperPracticeController> logger, Repository repository)
+        public CRUDController(ILogger<CRUDController> logger, Repository repository)
         {
             _logger = logger;
             _repository = repository;
@@ -31,15 +31,16 @@ namespace Practice.Controllers
         {
             var data = _repository.Add(FormModel);
             return Json(new ResultModel { IsSuccess = data >= 1 , });
+            //return Json(new ResultModel { IsSuccess = true, });
         }
         [HttpPost]
-        public JsonResult GetByID(int ID)
+        public JsonResult GetByID([FromBody] int ID)
         {
             var data = _repository.GetByID(ID);
             return Json(new ResultModel {  Data = data, });
         }
         [HttpPost]
-        public JsonResult Delete(int ID)
+        public JsonResult Delete([FromBody]int ID)
         {
             var data = _repository.Delete(ID);
             return Json(new ResultModel { IsSuccess = data >= 1, });

@@ -34,6 +34,12 @@ namespace Practice
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Practice", Version = "v1" });
             });
+            services.AddCors(options => {
+
+                options.AddPolicy("any", builder => {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +50,7 @@ namespace Practice
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Practice v1"));
 
             app.UseHttpsRedirection();
-
+            app.UseCors("any");
             app.UseRouting();
 
             app.UseAuthorization();
