@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.Extensions.Configuration;
 using Practice.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,10 @@ namespace Practice.DB
     {
         private string connectionString { get; }
 
-        public Repository()
+        public Repository(IConfiguration config)
         {
-            connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string DataSource = config["LocalDB"];
+            connectionString = @$"Data Source={DataSource}";
         }
         public IDbConnection Connection
         {

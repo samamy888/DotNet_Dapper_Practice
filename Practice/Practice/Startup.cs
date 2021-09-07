@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Practice.DB;
+using Practice.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace Practice
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Practice", Version = "v1" });
             });
+            services.AddScoped<EFService>();
+
             services.AddCors(options => {
 
                 options.AddPolicy("any", builder => {
