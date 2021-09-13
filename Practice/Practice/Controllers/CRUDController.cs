@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Practice.DB;
 using Practice.EF;
@@ -16,6 +17,7 @@ namespace Practice.Controllers
         {
             _logger = logger;
             _repository = repository;
+            
         }
         [HttpPost]
         public JsonResult GetAll()
@@ -43,6 +45,22 @@ namespace Practice.Controllers
         }
         [HttpPost]
         public JsonResult Update(TestModel FormModel)
+        {
+            var data = _repository.Update(FormModel);
+            return Json(new ResultModel { IsSuccess = data >= 1, });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult DeleteV2([FromBody] int ID)
+        {
+            var data = _repository.Delete(ID);
+            return Json(new ResultModel { IsSuccess = data >= 1, });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult UpdateV2(TestModel FormModel)
         {
             var data = _repository.Update(FormModel);
             return Json(new ResultModel { IsSuccess = data >= 1, });

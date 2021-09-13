@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Practice.Helper;
+using Practice.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,55 +16,52 @@ namespace Practice.Controllers
     public class AuthController : Controller
     {
         private readonly JwtHelper jwt;
-        public AuthController(JwtHelper jwtHelper)
+        private readonly ILogger<AuthController> _logger;
+        public AuthController(JwtHelper jwtHelper, ILogger<AuthController> logger)
         {
             jwt = jwtHelper;
+            _logger = logger;
         }
 
         [AllowAnonymous]
-        [HttpPost("~/signin")]
-        public ActionResult<string> SignIn(LoginViewModel login)
+        [HttpPost]
+        public ActionResult<string> SignIn(LoginModel login)
         {
             if (ValidateUser(login))
             {
+                _logger.LogInformation("Sign In !");
                 return jwt.GenerateToken(login.Username);
             }
             else
             {
-                return BadRequest();
+                return Unauthorized();
             }
         }
 
-        private bool ValidateUser(LoginViewModel login)
+        private bool ValidateUser(LoginModel login)
         {
-            return true; // TODO
+            return login.Username.ToLower() == "demo" && login.Password == "123";
         }
 
         [Authorize]
-        [HttpGet("~/claims")]
+        [HttpGet]
         public IActionResult GetClaims()
         {
             return Ok(User.Claims.Select(p => new { p.Type, p.Value }));
         }
 
         [Authorize]
-        [HttpGet("~/username")]
+        [HttpGet]
         public IActionResult GetUserName()
         {
             return Ok(User.Identity.Name);
         }
 
-        [HttpGet("~/jwtid")]
+        [HttpGet]
         public IActionResult GetUniqueId()
         {
             var jti = User.Claims.FirstOrDefault(p => p.Type == "jti");
             return Ok(jti.Value);
         }
-    }
-
-    public class LoginViewModel
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
     }
 }
