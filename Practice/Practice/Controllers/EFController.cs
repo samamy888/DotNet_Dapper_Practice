@@ -20,7 +20,7 @@ namespace Practice.Controllers
             _logger = logger;
             _EFService = EFService;
         }
-        [HttpPost]
+        [HttpGet]
         public JsonResult GetAll()
         {
             var data = _EFService.GetAllAsync();
@@ -32,19 +32,19 @@ namespace Practice.Controllers
             var data = _EFService.Add(FormModel);
             return Json(new ResultModel { IsSuccess = data >= 1, });
         }
-        [HttpPost]
+        [HttpGet]
         public JsonResult GetByID([FromBody] int ID)
         {
             var data = _EFService.GetByID(ID);
             return Json(new ResultModel { Data = data, });
         }
-        [HttpPost]
+        [HttpDelete]
         public JsonResult Delete([FromBody] int ID)
         {
             var data = _EFService.Delete(ID);
             return Json(new ResultModel { IsSuccess = data >= 1, });
         }
-        [HttpPost]
+        [HttpPut]
         public JsonResult Update(TestModel FormModel)
         {
             var data = _EFService.Update(FormModel);

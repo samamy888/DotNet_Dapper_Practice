@@ -19,7 +19,7 @@ namespace Practice.Controllers
             _repository = repository;
             
         }
-        [HttpPost]
+        [HttpGet]
         public JsonResult GetAll()
         {
             var data = _repository.GetAll();
@@ -31,19 +31,19 @@ namespace Practice.Controllers
             var data = _repository.Add(FormModel);
             return Json(new ResultModel { IsSuccess = data >= 1 , });
         }
-        [HttpPost]
+        [HttpGet]
         public JsonResult GetByID([FromBody] int ID)
         {
             var data = _repository.GetByID(ID);
             return Json(new ResultModel {  Data = data, });
         }
-        [HttpPost]
+        [HttpDelete]
         public JsonResult Delete([FromBody]int ID)
         {
             var data = _repository.Delete(ID);
             return Json(new ResultModel { IsSuccess = data >= 1, });
         }
-        [HttpPost]
+        [HttpPut]
         public JsonResult Update(TestModel FormModel)
         {
             var data = _repository.Update(FormModel);
@@ -51,7 +51,7 @@ namespace Practice.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpDelete]
         public JsonResult DeleteV2([FromBody] int ID)
         {
             var data = _repository.Delete(ID);
@@ -59,7 +59,7 @@ namespace Practice.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         public JsonResult UpdateV2(TestModel FormModel)
         {
             var data = _repository.Update(FormModel);
