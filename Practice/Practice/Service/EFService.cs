@@ -11,56 +11,41 @@ namespace Practice.Service
     public class EFService
     {
         private IConfiguration _config;
-        public EFService(IConfiguration config)
+        private readonly EFContext _eFContext;
+
+        public EFService(IConfiguration config, EFContext eFContext)
         {
             _config = config;
+            _eFContext = eFContext;
         }
         public int Add(TestModel testModel)
         {
-            using (var db = new EFContext(_config))
-            {
-                db.EFTable.Add(testModel);
-                return db.SaveChanges();
-            }
+            _eFContext.EFTable.Add(testModel);
+            return _eFContext.SaveChanges();
         }
 
         public IEnumerable<TestModel> GetAllAsync()
         {
-            IEnumerable<TestModel> result;
-            using (var db = new EFContext(_config))
-            {
-                result =  db.EFTable.ToList();
-            }
-            return result;
+            return _eFContext.EFTable.AsEnumerable(); ;
         }
 
         public TestModel GetByID(int ID)
         {
-            using (var db = new EFContext(_config))
-            {
-                return db.EFTable.OrderBy(x => x.ID).First();
-            }
+            return _eFContext.EFTable.OrderBy(x => x.ID).First();
         }
 
         public int Delete(int ID)
         {
-            using (var db = new EFContext(_config))
-            {
-                TestModel testModel = new TestModel() { ID = ID };
-                db.EFTable.Attach(testModel);
-                db.EFTable.Remove(testModel);
-                return db.SaveChanges();
-            }
+            TestModel testModel = _eFContext.EFTable.FirstOrDefault(x => x.ID == ID);
+            _eFContext.EFTable.Remove(testModel);
+            return _eFContext.SaveChanges();
         }
 
         public int Update(TestModel testModel)
         {
-            using (var db = new EFContext(_config))
-            {
-                TestModel model = db.EFTable.OrderBy(x => x.ID).First();
-                model.Name = testModel.Name;
-                return db.SaveChanges();
-            }
+            TestModel model = _eFContext.EFTable.FirstOrDefault(x => x.ID == testModel.ID);
+            model.Name = testModel.Name;
+            return _eFContext.SaveChanges();
         }
     }
 }

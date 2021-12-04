@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Practice.DB;
+using Practice.EF;
 using Practice.Helper;
 using Practice.Service;
 using System;
@@ -39,8 +40,13 @@ namespace Practice
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Practice", Version = "v1" });
             });
+
+
             services.AddScoped<EFService>();
             services.AddSingleton<JwtHelper>();
+            services.AddScoped<EFContext>();
+
+
             services.AddCors(options =>
             {
 
