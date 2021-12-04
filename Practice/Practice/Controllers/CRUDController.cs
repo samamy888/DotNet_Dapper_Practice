@@ -12,12 +12,16 @@ namespace Practice.Controllers
     public class CRUDController : Controller
     {
         private readonly ILogger<CRUDController> _logger;
-        private readonly Repository _repository;
-        public CRUDController(ILogger<CRUDController> logger, Repository repository)
+        //private readonly Repository _repository;
+        private readonly SQLiteSetup _repository;
+
+        public CRUDController(ILogger<CRUDController> logger, Repository repository,SQLiteSetup sQLiteSetup)
         {
             _logger = logger;
-            _repository = repository;
-            
+            //_repository = repository;
+            _repository = sQLiteSetup;
+
+
         }
         [HttpGet]
         public JsonResult GetAll()

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Practice.Config;
 using Practice.DB;
 using Practice.EF;
 using Practice.Helper;
@@ -45,7 +46,8 @@ namespace Practice
             services.AddScoped<EFService>();
             services.AddSingleton<JwtHelper>();
             services.AddScoped<EFContext>();
-
+            services.Configure<DBConfig>(Configuration.GetSection("SQLite"));
+            services.AddScoped<SQLiteSetup>();
 
             services.AddCors(options =>
             {
@@ -90,7 +92,7 @@ namespace Practice
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IServiceProvider serviceProvider)
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
